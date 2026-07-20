@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>22 Ağustos Tatil Yolculuğu — Haftalık Takip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fdf6f0;
+    --peach:#ef7b3d;
+    --peach-deep:#e2621f;
+    --peach-soft:#fce8db;
+    --teal:#16b7bf;
+    --teal-soft:#e3f7f8;
+    --navy:#1e2a3a;
+    --navy-deep:#161f2b;
+    --gray:#647480;
+    --gray-light:#8a95a5;
+    --border:#eee1d3;
+    --white:#ffffff;
+    --radius-lg:22px;
+    --radius-md:14px;
+    --radius-sm:8px;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    font-family:'Fredoka', sans-serif;
+    background:var(--cream);
+    color:var(--navy);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(60px);
+    z-index:0;
+    pointer-events:none;
+  }
+  .blob-top{
+    width:420px;height:420px;
+    top:-140px;right:-140px;
+    background:radial-gradient(circle, rgba(239,123,61,0.20), rgba(239,123,61,0) 70%);
+  }
+  .blob-bottom{
+    width:380px;height:380px;
+    bottom:-120px;left:-120px;
+    background:radial-gradient(circle, rgba(190,214,120,0.22), rgba(190,214,120,0) 70%);
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:920px;
+    margin:0 auto;
+    padding:40px 20px 60px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    text-align:center;
+    padding:20px 8px 8px;
+  }
+  .eyebrow{
+    color:var(--peach);
+    font-weight:600;
+    font-size:0.78rem;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  h1{
+    font-size:2.4rem;
+    font-weight:600;
+    line-height:1.15;
+    margin:0 0 18px;
+    color:var(--navy);
+  }
+  .subtitle{
+    color:var(--gray);
+    font-size:1rem;
+    font-weight:400;
+    line-height:1.55;
+    max-width:560px;
+    margin:0 auto 22px;
+  }
+  .countdown-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:10px 20px;
+    font-size:0.92rem;
+    font-weight:500;
+    color:var(--navy);
+    box-shadow:0 8px 20px rgba(30,42,58,0.06);
+    margin-bottom:14px;
+  }
+  .countdown-chip b{color:var(--peach); font-size:1.05rem;}
+
+  .sync-bar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .sync-btn{
+    font-family:inherit;
+    font-size:0.82rem;
+    font-weight:500;
+    color:var(--white);
+    background:var(--teal);
+    border:none;
+    border-radius:100px;
+    padding:9px 16px;
+    cursor:pointer;
+  }
+  .sync-btn:focus-visible{outline:2px solid var(--navy); outline-offset:2px;}
+  .sync-status{
+    font-size:0.8rem;
+    color:var(--gray-light);
+  }
+  .sync-note{
+    font-size:0.74rem;
+    color:var(--gray-light);
+    margin-top:6px;
+    max-width:420px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  /* ---------- OVERVIEW STAT CARD ---------- */
+  .overview{
+    background:var(--white);
+    border-radius:var(--radius-lg);
+    box-shadow:0 12px 30px rgba(30,42,58,0.07);
+    padding:32px 28px;
+    margin:36px 0;
+    display:flex;
+    align-items:center;
+    gap:28px;
+    flex-wrap:wrap;
+  }
+  .overview-number{
+    font-size:3.6rem;
+    font-weight:600;
+    color:var(--peach);
+    line-height:1;
+    min-width:150px;
+  }
+  .overview-divider{
+    width:44px;
+    height:3px;
+    background:var(--teal);
+    border-radius:3px;
+    margin:10px 0 12px;
+  }
+  .overview-text h3{
+    margin:0 0 6px;
+    font-size:1.05rem;
+    font-weight:600;
+  }
+  .overview-text p{
+    margin:0;
+    color:var(--gray);
+    font-size:0.9rem;
+    line-height:1.5;
+  }
+  .overview-bar-track{
+    flex:1 1 200px;
+    min-width:160px;
+  }
+  .overview-bar-bg{
+    background:var(--peach-soft);
+    border-radius:100px;
+    height:10px;
+    overflow:hidden;
+  }
+  .overview-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--peach), var(--teal));
+    border-radius:100px;
+    width:0%;
+    transition:width .4s ease;
+  }
+  .overview-bar-label{
+    margin-top:8px;
+    font-size:0.82rem;
+    color:var(--gray-light);
+  }
+
+  /* ---------- WEEK ACCORDION ---------- */
+  .week{
+    background:var(--white);
+    border-radius:var(--radius-lg);
+    box-shadow:0 10px 26px rgba(30,42,58,0.06);
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .week-header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:20px 22px;
+    cursor:pointer;
+    user-select:none;
+    background:var(--navy);
+    color:var(--white);
+  }
+  .week-header:focus-visible{
+    outline:3px solid var(--teal);
+    outline-offset:-3px;
+  }
+  .week-badge{
+    flex:0 0 auto;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:var(--peach);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:600;
+    font-size:1rem;
+  }
+  .week-titles{flex:1 1 auto; min-width:0;}
+  .week-titles h2{
+    margin:0;
+    font-size:1.15rem;
+    font-weight:600;
+  }
+  .week-titles span{
+    font-size:0.8rem;
+    color:#b9c3d1;
+    font-weight:400;
+  }
+  .week-progress-mini{
+    text-align:right;
+    font-size:0.82rem;
+    color:#d8dde6;
+    flex:0 0 auto;
+  }
+  .week-progress-mini b{color:var(--teal); font-weight:600;}
+  .chevron{
+    flex:0 0 auto;
+    transition:transform .25s ease;
+    font-size:1rem;
+    color:#b9c3d1;
+  }
+  .week-header[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+
+  .week-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .week-body-inner{
+    padding:24px 22px 26px;
+  }
+
+  .days-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+    gap:14px;
+  }
+
+  .day-card{
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    padding:16px;
+    background:#fffdfb;
+    transition:box-shadow .2s ease, border-color .2s ease;
+  }
+  .day-card.is-today{
+    border-color:var(--peach);
+    box-shadow:0 0 0 3px rgba(239,123,61,0.15);
+  }
+  .day-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .day-head .day-label{
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .day-head .day-weekday{
+    display:block;
+    font-size:0.76rem;
+    color:var(--gray-light);
+    font-weight:400;
+  }
+  .today-tag{
+    background:var(--peach);
+    color:var(--white);
+    font-size:0.68rem;
+    font-weight:600;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border-radius:100px;
+  }
+
+  .field-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .field-row label.small-label{
+    font-size:0.82rem;
+    color:var(--gray);
+    flex:0 0 70px;
+  }
+  .kilo-input{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    padding:7px 10px;
+    font-family:inherit;
+    font-size:0.9rem;
+    color:var(--navy);
+    background:var(--white);
+  }
+  .kilo-input:focus-visible, .akt-input:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:1px;
+  }
+
+  .checklist{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin:10px 0 12px;
+  }
+  .chk{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
+    font-size:0.86rem;
+    color:var(--navy);
+  }
+  .chk input{
+    position:absolute;
+    opacity:0;
+    width:1px;height:1px;
+  }
+  .chk .box{
+    flex:0 0 auto;
+    width:19px;height:19px;
+    border-radius:6px;
+    border:2px solid var(--border);
+    background:var(--white);
+    position:relative;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .chk .box::after{
+    content:'';
+    position:absolute;
+    display:none;
+    left:5px; top:1px;
+    width:5px; height:9px;
+    border:solid var(--white);
+    border-width:0 2px 2px 0;
+    transform:rotate(40deg);
+  }
+  .chk input:checked + .box{
+    background:var(--teal);
+    border-color:var(--teal);
+  }
+  .chk.protokol input:checked + .box{
+    background:var(--peach);
+    border-color:var(--peach);
+  }
+  .chk input:checked + .box::after{display:block;}
+  .chk input:focus-visible + .box{
+    outline:2px solid var(--teal);
+    outline-offset:2px;
+  }
+  .chk .emoji{font-size:0.95rem;}
+
+  .akt-wrap{margin-top:2px;}
+  .akt-wrap .cap{
+    font-size:0.7rem;
+    color:var(--gray-light);
+    display:block;
+    margin-bottom:5px;
+  }
+  .akt-input{
+    width:100%;
+    border:1px dashed var(--border);
+    border-radius:var(--radius-sm);
+    padding:7px 10px;
+    font-family:inherit;
+    font-size:0.85rem;
+    color:var(--navy);
+    background:var(--white);
+  }
+
+  .week-footer{
+    margin-top:18px;
+    background:var(--navy);
+    color:var(--white);
+    border-radius:100px;
+    padding:11px 18px;
+    text-align:center;
+    font-size:0.82rem;
+    font-weight:500;
+  }
+  .week-footer.sprint{
+    background:linear-gradient(90deg, var(--peach), var(--peach-deep));
+  }
+
+  /* ---------- CLOSING ---------- */
+  .closing{
+    text-align:center;
+    margin-top:44px;
+    padding:0 8px;
+  }
+  .fire-banner{
+    color:var(--peach);
+    font-weight:600;
+    font-size:1.05rem;
+    margin-bottom:22px;
+  }
+  .quote{
+    color:var(--gray-light);
+    font-size:1.6rem;
+    font-weight:500;
+    max-width:480px;
+    margin:0 auto 10px;
+    line-height:1.3;
+  }
+  .signoff{
+    color:var(--peach);
+    font-weight:500;
+    font-size:1rem;
+    margin-bottom:36px;
+  }
+  .meta-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    font-size:0.78rem;
+    color:var(--gray-light);
+  }
+  .saved-indicator{
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .saved-indicator.show{opacity:1;}
+  .reset-link{
+    color:var(--gray-light);
+    text-decoration:underline;
+    cursor:pointer;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:0.78rem;
+    padding:0;
+  }
+
+  @media (max-width:560px){
+    h1{font-size:1.85rem;}
+    .overview{padding:24px 18px; gap:18px;}
+    .overview-number{font-size:2.8rem; min-width:auto;}
+    .week-titles h2{font-size:1rem;}
+    .quote{font-size:1.3rem;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .week-body, .chevron, .overview-bar-fill, .day-card, .saved-indicator{
+      transition:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-top"></div>
+<div class="blob blob-bottom"></div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Bölüm II · Haftalık Takip</div>
+    <h1>22 Ağustos<br>Tatil Yolculuğu</h1>
+    <p class="subtitle">20 Temmuz Pazartesi gününden itibaren her hafta dilediğin aktiviteyi seçip yazarak kendi ritmine göre interaktif takibini yap.</p>
+    <div class="countdown-chip" id="countdownChip">🔥 Hesaplanıyor…</div>
+    <div class="sync-bar">
+      <button class="sync-btn" id="syncNowBtn" type="button">🔄 Şimdi Senkronize Et</button>
+      <span class="sync-status" id="syncStatus">Yalnızca bu cihazda kayıtlı</span>
+    </div>
+    <p class="sync-note">Veriler otomatik olarak Google Sheets'teki "Sevde GYM" dosyasına yazılır — hangi cihazdan girersen gir aynı takip senkronize olur.</p>
+  </header>
+
+  <section class="overview">
+    <div>
+      <div class="overview-number" id="overallPercent">0%</div>
+      <div class="overview-divider"></div>
+    </div>
+    <div class="overview-text">
+      <h3>Genel İlerleme</h3>
+      <p>Hedef: haftalık en az %80 uyum (34 tik). Toplam <span id="overallCount">0 / 198</span> tik işaretlendi.</p>
+    </div>
+    <div class="overview-bar-track">
+      <div class="overview-bar-bg"><div class="overview-bar-fill" id="overallBarFill"></div></div>
+      <div class="overview-bar-label">Tüm program (33 gün)</div>
+    </div>
+  </section>
+
+  <main id="weeksContainer"></main>
+
+  <footer class="closing">
+    <div class="fire-banner">🔥 22 Ağustos Cumartesi: Tatil Başlıyor!</div>
+    <p class="quote">Disiplin tatile kadar,<br>hafiflik ve özgüven ömür boyu.</p>
+    <p class="signoff">Harika Bir Tatil Dilerim! ☀️🌴</p>
+    <div class="meta-row">
+      <span class="saved-indicator" id="savedIndicator">✓ Kaydedildi</span>
+      <button class="reset-link" id="resetBtn" type="button">Tüm verileri sıfırla</button>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ===================== GOOGLE SHEETS SENKRON AYARLARI =====================
+  // Aşağıdaki WEBAPP_URL değerini, Apps Script'i "Web app" olarak deploy
+  // ettiğinde aldığın URL ile değiştir (…/exec ile biten adres).
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzOf-xzLG2Dfu-8TVz1yYMhJEMD6PDv8siqrD1EvNq6g9MM69ky-v4DCyOWzwkVbEw1/exec';
+  // ===========================================================================
+
+  var isConfigured = WEBAPP_URL.indexOf('BURAYA_APPS_SCRIPT') === -1;
+
+  var TR_WEEKDAY = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  var TR_MONTH_FULL = {6:'Temmuz',7:'Ağustos'};
+  var TR_MONTH_SHORT = {6:'Tem',7:'Ağu'};
+
+  function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function isoOf(d){
+    return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate());
+  }
+
+  function genDays(startIso, count){
+    var parts = startIso.split('-').map(Number);
+    var cursor = new Date(parts[0], parts[1]-1, parts[2]);
+    var out = [];
+    for (var i=0; i<count; i++){
+      var dow = cursor.getDay();
+      var mon = cursor.getMonth();
+      var dayNum = cursor.getDate();
+      var dayLabelNum = (mon === 7) ? pad2(dayNum) : dayNum;
+      out.push({
+        date: isoOf(cursor),
+        label: dayLabelNum + ' ' + TR_MONTH_FULL[mon],
+        weekday: TR_WEEKDAY[dow]
+      });
+      cursor.setDate(cursor.getDate()+1);
+    }
+    return out;
+  }
+
+  function rangeLabel(days){
+    var first = days[0], last = days[days.length-1];
+    function shortFmt(dstr){
+      var p = dstr.split('-').map(Number);
+      var mon = p[1]-1;
+      return p[2] + ' ' + TR_MONTH_SHORT[mon];
+    }
+    return shortFmt(first.date) + ' – ' + shortFmt(last.date);
+  }
+
+  var WEEK_DEFS = [
+    {id:'w1', title:'1. Hafta', badge:'1', start:'2026-07-20', count:7, protokolLabel:'3X / HAFTA'},
+    {id:'w2', title:'2. Hafta', badge:'2', start:'2026-07-27', count:7, protokolLabel:'3X / HAFTA'},
+    {id:'w3', title:'3. Hafta', badge:'3', start:'2026-08-03', count:7, protokolLabel:'3X / HAFTA'},
+    {id:'w4', title:'4. Hafta', badge:'4', start:'2026-08-10', count:7, protokolLabel:'3X / HAFTA'},
+    {id:'w5', title:'Son Sprint', badge:'★', start:'2026-08-17', count:5, protokolLabel:'1X'}
+  ];
+
+  var WEEKS = WEEK_DEFS.map(function(w){
+    var days = genDays(w.start, w.count);
+    return {
+      id:w.id, title:w.title, badge:w.badge, protokolLabel:w.protokolLabel,
+      days:days, range: rangeLabel(days)
+    };
+  });
+
+  var ALL_DAYS = [];
+  WEEKS.forEach(function(w){
+    w.days.forEach(function(d){
+      ALL_DAYS.push({date:d.date, label:d.label, weekday:d.weekday, week:w.title});
+    });
+  });
+
+  var TODAY_ISO = isoOf(new Date());
+  var HOLIDAY_ISO = '2026-08-22';
+
+  // ---------- LOCAL STATE / STORAGE ----------
+  var STORAGE_KEY = 'glowUpTakip2026_v1';
+  var state = {};
+  var localOk = true;
+
+  (function loadLocal(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = JSON.parse(raw) || {};
+    } catch(e){
+      localOk = false;
+      state = {};
+    }
+  })();
+
+  function saveLocal(){
+    if (!localOk) return;
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      flashSaved();
+    } catch(e){
+      localOk = false;
+    }
+  }
+
+  function getDay(dateIso){
+    if (!state[dateIso]) state[dateIso] = {};
+    return state[dateIso];
+  }
+
+  var savedTimer = null;
+  function flashSaved(){
+    var el = document.getElementById('savedIndicator');
+    el.classList.add('show');
+    clearTimeout(savedTimer);
+    savedTimer = setTimeout(function(){ el.classList.remove('show'); }, 1400);
+  }
+
+  // ---------- RENDER ----------
+  var CHECK_FIELDS = ['y1','y2','su','vit','sek','pro'];
+
+  function dayCardHtml(day){
+    var d = getDay(day.date);
+    var isToday = day.date === TODAY_ISO;
+    return ''+
+    '<div class="day-card'+(isToday?' is-today':'')+'" data-date="'+day.date+'">'+
+      '<div class="day-head">'+
+        '<div><span class="day-label">'+day.label+'</span><span class="day-weekday">'+day.weekday+'</span></div>'+
+        (isToday ? '<span class="today-tag">Bugün</span>' : '')+
+      '</div>'+
+      '<div class="field-row">'+
+        '<label class="small-label">Kilo (kg)</label>'+
+        '<input class="kilo-input" type="number" step="0.1" inputmode="decimal" placeholder="0.0" data-field="kilo" value="'+(d.kilo||'')+'">'+
+      '</div>'+
+      '<div class="checklist">'+
+        chkHtml('y1','🌤️','10:30 Yemek', d.y1)+
+        chkHtml('y2','🌙','18:30 Yemek', d.y2)+
+        chkHtml('su','💧','2L Su', d.su)+
+        chkHtml('vit','💊','Vitamin', d.vit)+
+        chkHtml('sek','🚫','Sıfır Şeker', d.sek)+
+        chkHtml('pro','🧊','Protokol', d.pro, true)+
+      '</div>'+
+      '<div class="akt-wrap">'+
+        '<span class="cap">Aktivite Kredisi (Rocycle / Koşu ≥25 dk / Bacak)</span>'+
+        '<input class="akt-input" type="text" placeholder="Yazın…" data-field="akt" value="'+escapeAttr(d.akt||'')+'">'+
+      '</div>'+
+    '</div>';
+  }
+
+  function chkHtml(field, emoji, label, checked, isProtokol){
+    return '<label class="chk'+(isProtokol?' protokol':'')+'">'+
+      '<input type="checkbox" data-field="'+field+'"'+(checked?' checked':'')+'>'+
+      '<span class="box"></span>'+
+      '<span class="emoji">'+emoji+'</span>'+
+      '<span>'+label+'</span>'+
+    '</label>';
+  }
+
+  function escapeAttr(str){
+    return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  }
+
+  function weekHtml(week){
+    var total = week.days.length * CHECK_FIELDS.length;
+    var footer = week.protokolLabel === '1X'
+      ? '<div class="week-footer sprint">🔥 22 Ağustos Cumartesi: Tatil Başlıyor!</div>'
+      : '<div class="week-footer">🎯 Başarı Baremi: En az 34 Tik / 43 Kutu (%80 Uyum)</div>';
+
+    return ''+
+    '<section class="week" id="'+week.id+'">'+
+      '<div class="week-header" role="button" tabindex="0" aria-expanded="false" data-target="'+week.id+'-body">'+
+        '<div class="week-badge">'+week.badge+'</div>'+
+        '<div class="week-titles">'+
+          '<h2>'+week.title+'</h2>'+
+          '<span>'+week.range+' · Protokol '+week.protokolLabel+'</span>'+
+        '</div>'+
+        '<div class="week-progress-mini" id="'+week.id+'-mini">0 / '+total+'</div>'+
+        '<div class="chevron">▾</div>'+
+      '</div>'+
+      '<div class="week-body" id="'+week.id+'-body">'+
+        '<div class="week-body-inner">'+
+          '<div class="days-grid">'+
+            week.days.map(dayCardHtml).join('')+
+          '</div>'+
+          footer+
+        '</div>'+
+      '</div>'+
+    '</section>';
+  }
+
+  function render(){
+    document.getElementById('weeksContainer').innerHTML = WEEKS.map(weekHtml).join('');
+  }
+
+  function applyStateToDom(){
+    document.querySelectorAll('[data-date]').forEach(function(card){
+      var date = card.getAttribute('data-date');
+      var d = state[date] || {};
+      CHECK_FIELDS.forEach(function(f){
+        var input = card.querySelector('[data-field="'+f+'"]');
+        if (input) input.checked = !!d[f];
+      });
+      var kilo = card.querySelector('[data-field="kilo"]');
+      if (kilo) kilo.value = d.kilo || '';
+      var akt = card.querySelector('[data-field="akt"]');
+      if (akt) akt.value = d.akt || '';
+    });
+    updateProgress();
+  }
+
+  // ---------- PROGRESS ----------
+  function weekCount(week){
+    var count = 0;
+    week.days.forEach(function(day){
+      var d = state[day.date];
+      if (!d) return;
+      CHECK_FIELDS.forEach(function(f){ if (d[f]) count++; });
+    });
+    return count;
+  }
+
+  function updateProgress(){
+    var overallCount = 0, overallTotal = 0;
+    WEEKS.forEach(function(week){
+      var total = week.days.length * CHECK_FIELDS.length;
+      var count = weekCount(week);
+      overallCount += count;
+      overallTotal += total;
+      var mini = document.getElementById(week.id+'-mini');
+      if (mini) mini.innerHTML = count+' / '+total;
+    });
+    var pct = overallTotal ? Math.round((overallCount/overallTotal)*100) : 0;
+    document.getElementById('overallPercent').textContent = pct + '%';
+    document.getElementById('overallCount').textContent = overallCount + ' / ' + overallTotal;
+    document.getElementById('overallBarFill').style.width = pct + '%';
+  }
+
+  // ---------- ACCORDION ----------
+  function setExpanded(header, expand){
+    var body = document.getElementById(header.getAttribute('data-target'));
+    header.setAttribute('aria-expanded', expand ? 'true' : 'false');
+    body.style.maxHeight = expand ? (body.scrollHeight + 'px') : '0px';
+  }
+
+  function toggleHeader(header){
+    var expanded = header.getAttribute('aria-expanded') === 'true';
+    setExpanded(header, !expanded);
+  }
+
+  function initAccordion(){
+    var headers = document.querySelectorAll('.week-header');
+    headers.forEach(function(h){
+      h.addEventListener('click', function(){ toggleHeader(h); });
+      h.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggleHeader(h);
+        }
+      });
+    });
+
+    var targetWeek = WEEKS.find(function(w){
+      return w.days.some(function(d){ return d.date === TODAY_ISO; });
+    }) || WEEKS[0];
+    var targetHeader = document.querySelector('.week-header[data-target="'+targetWeek.id+'-body"]');
+    if (targetHeader) setExpanded(targetHeader, true);
+
+    window.addEventListener('resize', function(){
+      document.querySelectorAll('.week-header[aria-expanded="true"]').forEach(function(h){
+        var body = document.getElementById(h.getAttribute('data-target'));
+        body.style.maxHeight = body.scrollHeight + 'px';
+      });
+    });
+  }
+
+  // ---------- INPUT HANDLING ----------
+  function handleFieldChange(e){
+    var input = e.target.closest('[data-field]');
+    if (!input) return;
+    var card = input.closest('[data-date]');
+    if (!card) return;
+    var date = card.getAttribute('data-date');
+    var field = input.getAttribute('data-field');
+    var d = getDay(date);
+    d[field] = input.type === 'checkbox' ? input.checked : input.value;
+    saveLocal();
+    queueSheetsSync();
+    updateProgress();
+
+    var openBody = input.closest('.week-body');
+    if (openBody) openBody.style.maxHeight = openBody.scrollHeight + 'px';
+  }
+
+  function initInputs(){
+    var container = document.getElementById('weeksContainer');
+    container.addEventListener('input', handleFieldChange);
+    container.addEventListener('change', handleFieldChange);
+  }
+
+  // ---------- COUNTDOWN ----------
+  function initCountdown(){
+    var today = new Date(TODAY_ISO);
+    var holiday = new Date(HOLIDAY_ISO);
+    var diffDays = Math.round((holiday - today) / 86400000);
+    var el = document.getElementById('countdownChip');
+    if (diffDays > 1){
+      el.innerHTML = '🔥 Tatile <b>'+diffDays+'</b> gün kaldı';
+    } else if (diffDays === 1){
+      el.innerHTML = '🔥 Tatil <b>yarın</b> başlıyor!';
+    } else if (diffDays === 0){
+      el.innerHTML = '🌴 Tatil <b>bugün</b> başlıyor!';
+    } else {
+      el.innerHTML = '☀️ İyi tatiller!';
+    }
+  }
+
+  // ---------- GOOGLE SHEETS SYNC (Apps Script web app) ----------
+  var syncTimer = null;
+  var SHEETS_HEADER = ['Tarih','Hafta','Kilo (kg)','10:30 Yemek','18:30 Yemek','2L Su','Vitamin','Sıfır Şeker','Aktivite Kredisi','Protokol'];
+
+  function setSyncStatus(text){
+    var el = document.getElementById('syncStatus');
+    if (el) el.textContent = text;
+  }
+
+  function nowTime(){
+    var d = new Date();
+    return pad2(d.getHours())+':'+pad2(d.getMinutes());
+  }
+
+  function buildRows(){
+    var rows = [SHEETS_HEADER];
+    ALL_DAYS.forEach(function(day){
+      var d = state[day.date] || {};
+      rows.push([
+        day.label+' '+day.weekday,
+        day.week,
+        d.kilo || '',
+        d.y1 ? '✓' : '',
+        d.y2 ? '✓' : '',
+        d.su ? '✓' : '',
+        d.vit ? '✓' : '',
+        d.sek ? '✓' : '',
+        d.akt || '',
+        d.pro ? '✓' : ''
+      ]);
+    });
+    return rows;
+  }
+
+  function parseRows(values){
+    var rows = values || [];
+    ALL_DAYS.forEach(function(day, idx){
+      var row = rows[idx+1]; // idx 0 = header row
+      if (!row) return;
+      var d = getDay(day.date);
+      d.kilo = row[2] || '';
+      d.y1 = row[3] === '✓';
+      d.y2 = row[4] === '✓';
+      d.su = row[5] === '✓';
+      d.vit = row[6] === '✓';
+      d.sek = row[7] === '✓';
+      d.akt = row[8] || '';
+      d.pro = row[9] === '✓';
+    });
+  }
+
+  function sheetsRead(){
+    // Plain GET, no custom headers -> stays a "simple" CORS request
+    return fetch(WEBAPP_URL, {method:'GET'}).then(function(r){
+      if (!r.ok) throw new Error('sheets read failed: '+r.status);
+      return r.json();
+    });
+  }
+
+  function sheetsWrite(rows){
+    // no-cors: Apps Script's exec endpoint redirects internally on POST, which
+    // blocks a readable cross-origin response even with text/plain. We can't
+    // read the result this way, but the write itself still goes through.
+    return fetch(WEBAPP_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({values: rows})
+    });
+  }
+
+  function sheetsLoadOrSeed(){
+    return sheetsRead().then(function(res){
+      if (res.values && res.values.length > 1){
+        parseRows(res.values);
+        saveLocal();
+      } else {
+        return sheetsWrite(buildRows());
+      }
+    });
+  }
+
+  function queueSheetsSync(){
+    if (!isConfigured) return;
+    clearTimeout(syncTimer);
+    setSyncStatus('… değişiklik bekleniyor');
+    syncTimer = setTimeout(function(){
+      setSyncStatus('🔄 Senkronize ediliyor…');
+      sheetsWrite(buildRows()).then(function(){
+        setSyncStatus('✓ Senkronize · ' + nowTime());
+      }).catch(function(){
+        setSyncStatus('⚠️ Senkron hatası (yerelde kaydedildi)');
+      });
+    }, 1200);
+  }
+
+  function manualSync(){
+    if (!isConfigured){
+      alert('Google Sheets senkronu için önce Apps Script web app URL\'sini dosyaya eklemek gerekiyor.');
+      return;
+    }
+    setSyncStatus('🔄 Senkronize ediliyor…');
+    sheetsWrite(buildRows()).then(function(){
+      setSyncStatus('✓ Senkronize · ' + nowTime());
+    }).catch(function(){
+      setSyncStatus('⚠️ Senkron hatası (yerelde kaydedildi)');
+    });
+  }
+
+  function initSheetsSync(){
+    document.getElementById('syncNowBtn').addEventListener('click', manualSync);
+    if (!isConfigured){
+      setSyncStatus('⚙️ Senkron henüz ayarlanmadı (yalnızca bu cihaz)');
+      return;
+    }
+    setSyncStatus('🔄 Yükleniyor…');
+    sheetsLoadOrSeed().then(function(){
+      applyStateToDom();
+      setSyncStatus('✓ Senkronize · ' + nowTime());
+    }).catch(function(){
+      setSyncStatus('⚠️ Senkron hatası, yerel veriler kullanılıyor');
+    });
+  }
+
+  // ---------- RESET ----------
+  function initReset(){
+    document.getElementById('resetBtn').addEventListener('click', function(){
+      var ok = window.confirm('Tüm işaretlemeler ve notlar silinsin mi? Bu işlem geri alınamaz.');
+      if (!ok) return;
+      state = {};
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      render();
+      initAccordion();
+      updateProgress();
+      if (isConfigured) sheetsWrite(buildRows());
+    });
+  }
+
+  // ---------- BOOT ----------
+  render();
+  initAccordion();
+  initInputs();
+  initCountdown();
+  initReset();
+  initSheetsSync();
+  updateProgress();
+
+})();
+</script>
+</body>
+</html>
